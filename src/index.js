@@ -122,6 +122,12 @@ export function exec(str, arr) {
 	for (; i < arr.length; i++) {
 		x=segs[i]; y=arr[i];
 		if (x === SEP) continue;
+
+		if (y.val === '*') {
+			out[y.val] = segs.slice(i)
+			break
+		}
+
 		if (x !== void 0 && y.type | 2 === OTYPE) {
 			out[ y.val ] = x.replace(y.end, '');
 		}

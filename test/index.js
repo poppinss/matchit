@@ -389,3 +389,11 @@ test('continue match when matcher regex fails', t => {
 	t.deepEqual($.match('/foo/1', [foo, foo1]), foo1);
 	t.end();
 });
+
+test.only('wildcard match one and more', t => {
+	const foo = $.parse('/foo/*');
+	t.deepEqual($.exec('/foo/bar/baz', foo), {
+		'*': ['bar', 'baz']
+	});
+	t.end();
+});
