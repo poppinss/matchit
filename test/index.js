@@ -369,11 +369,11 @@ test('match params via matcher (found match)', t => {
 
 test('match params via matcher (optional-param)', t => {
 	const foo = $.parse('/foo/:bar?', {
-		bar: /[a-z]+/
+		bar: /^[0-9]+$/
 	});
 
 	t.deepEqual($.match('/foo', [foo]), foo);
-	t.is($.match('/foo/1', [foo]).length, 0);
+	t.deepEqual($.match('/foo/1', [foo]), foo);
 	t.end();
 });
 
@@ -390,7 +390,7 @@ test('continue match when matcher regex fails', t => {
 	t.end();
 });
 
-test.only('wildcard match one and more', t => {
+test('wildcard match one and more', t => {
 	const foo = $.parse('/foo/*');
 	t.deepEqual($.exec('/foo/bar/baz', foo), {
 		'*': ['bar', 'baz']
