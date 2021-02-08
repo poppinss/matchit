@@ -1,6 +1,9 @@
-# matchit [![Build Status](https://travis-ci.org/lukeed/matchit.svg?branch=master)](https://travis-ci.org/lukeed/matchit)
+# MatchIt
 
-> Quickly parse & match URLs
+> Quickly parse & match URLs. Forked from `lukeed/matchit`
+
+
+[![circleci-image]][circleci-url] [![npm-image]][npm-url] [![license-image]][license-url] [![synk-image]][synk-url]
 
 ## Install
 
@@ -156,11 +159,14 @@ The route definition to use, via [`matchit.match`](#matchitmatchurl-routes).
   path-to-regexp  x   102,250 ops/sec ±0.45% (95 runs sampled)
 ```
 
-## Related
+[circleci-image]: https://img.shields.io/circleci/project/github/poppinss/matchit/master.svg?style=for-the-badge&logo=circleci
+[circleci-url]: https://circleci.com/gh/poppinss/matchit "circleci"
 
-- [regexparam](https://github.com/lukeed/regexparam) - A similar (285B) utility, but relies on `RegExp` instead of String comparisons.
+[npm-image]: https://img.shields.io/npm/v/@poppinss/matchit.svg?style=for-the-badge&logo=npm
+[npm-url]: https://npmjs.org/package/@poppinss/matchit "npm"
 
+[license-image]: https://img.shields.io/npm/l/@poppinss/matchit?color=blueviolet&style=for-the-badge
+[license-url]: LICENSE.md "license"
 
-## License
-
-MIT © [Luke Edwards](https://lukeed.com)
+[synk-image]: https://img.shields.io/snyk/vulnerabilities/github/poppinss/matchit?label=Synk%20Vulnerabilities&style=for-the-badge
+[synk-url]: https://snyk.io/test/github/poppinss/matchit?targetFile=package.json "synk"
