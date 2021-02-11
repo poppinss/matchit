@@ -2,7 +2,6 @@
   "name": "@poppinss/matchit",
   "version": "2.0.1",
   "description": "Quickly parse & match URLs",
-  "module": "lib/matchit.mjs",
   "main": "lib/matchit.js",
   "license": "MIT",
   "files": [

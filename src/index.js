@@ -63,7 +63,7 @@ export function parse(str, matchers) {
 
 	if (typeof matchers === 'object') {
 		for (let k in matchers) {
-			if (matchers[k].constructor !== RegExp) {
+			if (!matchers[k].match || matchers[k].match.constructor !== RegExp) {
 				throw new Error(`the "${k}" key is not a RegExp`);
 			}
 		}
@@ -99,7 +99,7 @@ export function parse(str, matchers) {
 				type: t,
 				val: val,
 				end: sfx,
-				matcher: matchers[val]
+				matcher: matchers[val] && matchers[val].match
 			});
 
 			// shorten string & update pointers

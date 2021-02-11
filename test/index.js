@@ -342,7 +342,7 @@ test('exec empty (no match)', t => {
 
 test('match params not a regex (raise error)', t => {
 	const foo = () => $.parse('/foo/:bar', {
-		bar: 1
+		bar: { match: 1 }
 	});
 
 	t.throws(foo, /key is not a RegExp/, 'matcher must be a regex');
@@ -351,7 +351,7 @@ test('match params not a regex (raise error)', t => {
 
 test('match params via matcher (no match)', t => {
 	const foo = $.parse('/foo/:bar', {
-		bar: /[a-z]+/
+		bar: { match: /[a-z]+/ }
 	});
 
 	t.is($.match('/foo/1', [foo]).length, 0, 'no match found');
@@ -360,7 +360,7 @@ test('match params via matcher (no match)', t => {
 
 test('match params via matcher (found match)', t => {
 	const foo = $.parse('/foo/:bar', {
-		bar: /[a-z]+/
+		bar: { match: /[a-z]+/ }
 	});
 
 	t.deepEqual($.match('/foo/bar', [foo]), foo);
@@ -369,7 +369,7 @@ test('match params via matcher (found match)', t => {
 
 test('match params via matcher (optional-param)', t => {
 	const foo = $.parse('/foo/:bar?', {
-		bar: /^[0-9]+$/
+		bar: { match: /^[0-9]+$/ }
 	});
 
 	t.deepEqual($.match('/foo', [foo]), foo);
@@ -379,11 +379,11 @@ test('match params via matcher (optional-param)', t => {
 
 test('continue match when matcher regex fails', t => {
 	const foo = $.parse('/foo/:bar?', {
-		bar: /[a-z]+/
+		bar: { match: /[a-z]+/ }
 	});
 
 	const foo1 = $.parse('/foo/:id?', {
-		bar: /[0-9]+/
+		bar: { match: /[0-9]+/ }
 	});
 
 	t.deepEqual($.match('/foo/1', [foo, foo1]), foo1);
