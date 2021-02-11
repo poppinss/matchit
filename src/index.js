@@ -61,13 +61,7 @@ export function parse(str, matchers) {
 		return [{ old:str, type:STYPE, val:str, end:'' }];
 	}
 
-	if (typeof matchers === 'object') {
-		for (let k in matchers) {
-			if (!matchers[k].match || matchers[k].match.constructor !== RegExp) {
-				throw new Error(`the "${k}" key is not a RegExp`);
-			}
-		}
-	} else {
+	if (typeof matchers !== 'object') {
 		matchers = {};
 	}
 
@@ -93,13 +87,15 @@ export function parse(str, matchers) {
 			}
 
 			val = nxt.substring(j, x||i);
+			const matcher = matchers[val]
 
 			out.push({
 				old: str,
 				type: t,
 				val: val,
 				end: sfx,
-				matcher: matchers[val] && matchers[val].match
+				matcher: matcher && matcher.match,
+				cast: matcher && matcher.cast
 			});
 
 			// shorten string & update pointers
@@ -148,7 +144,8 @@ export function exec(str, arr) {
 		}
 
 		if (x !== void 0 && y.type | 2 === OTYPE) {
-			out[ y.val ] = x.replace(y.end, '');
+			const value = x.replace(y.end, '');
+			out[ y.val ] = y.cast ? y.cast(value) : value
 		}
 	}
 	return out;

@@ -21,7 +21,7 @@ function isEntry(t, segs, expect) {
 
 	segs.forEach((obj, idx) => {
 		let isParam = [1, 3].includes(obj.type);
-		t.is(Object.keys(obj).length, isParam ? 5 : 4, '~~> segment has `old`, `type` & `val` keys');
+		t.is(Object.keys(obj).length, isParam ? 6 : 4, '~~> segment has `old`, `type` & `val` keys');
 		t.is(typeof obj.type, 'number', '~~> segment.type is a number');
 		t.is(obj.type, expect[idx].type, '~~> segment.type returns expected value');
 		t.is(typeof obj.val, 'string', '~~> segment.val is a string');
@@ -168,10 +168,10 @@ test('match params (root index-vs-param)', t => {
 	t.is(bar[0], undefined, 'does not match root-index route with param-pattern');
 
 	let baz = $.match('/narnia', [$.parse('/:title')]);
-	t.same(baz[0], { old:'/:title', type:1, val:'title', end:'', matcher:undefined }, 'matches param-based route with param-pattern');
+	t.same(baz[0], { old:'/:title', type:1, val:'title', end:'', matcher:undefined, cast:undefined }, 'matches param-based route with param-pattern');
 
 	let bat = $.match('/', [$.parse('/:title?')]);
-	t.same(bat[0], { old:'/:title?', type:3, val:'title', end:'', matcher:undefined }, 'matches root-index route with optional-param pattern');
+	t.same(bat[0], { old:'/:title?', type:3, val:'title', end:'', matcher:undefined, cast:undefined }, 'matches root-index route with optional-param pattern');
 
 	let quz = $.match('/', [$.parse('*')]);
 	t.same(quz[0], { old:'*', type:2, val:'*', end:'' }, 'matches root-index route with root-wilcard pattern');
@@ -340,15 +340,6 @@ test('exec empty (no match)', t => {
 	t.end();
 });
 
-test('match params not a regex (raise error)', t => {
-	const foo = () => $.parse('/foo/:bar', {
-		bar: { match: 1 }
-	});
-
-	t.throws(foo, /key is not a RegExp/, 'matcher must be a regex');
-	t.end();
-});
-
 test('match params via matcher (no match)', t => {
 	const foo = $.parse('/foo/:bar', {
 		bar: { match: /[a-z]+/ }
@@ -395,5 +386,39 @@ test('wildcard match one and more', t => {
 	t.deepEqual($.exec('/foo/bar/baz', foo), {
 		'*': ['bar', 'baz']
 	});
+	t.end();
+});
+
+test('cast param via caster', t => {
+	const foo = $.parse('/foo/:bar', {
+		bar: { match: /^[0-9]+$/, cast: (value) => Number(value) }
+	});
+
+	t.deepEqual($.exec('/foo/1', foo), {
+		bar: 1
+	})
+	t.end();
+});
+
+test('do not cast missing param', t => {
+	const foo = $.parse('/foo/:bar?', {
+		bar: { match: /^[0-9]+$/, cast: (value) => Number(value) }
+	});
+
+	t.deepEqual($.exec('/foo', foo), {
+	})
+	t.end();
+});
+
+test('cast multiple params', t => {
+	const foo = $.parse('/foo/:bar/:baz', {
+		bar: { match: /^[0-9]+$/, cast: (value) => Number(value) },
+		baz: { cast: (value) => value.toUpperCase() }
+	});
+
+	t.deepEqual($.exec('/foo/1/hello', foo), {
+		bar: 1,
+		baz: 'HELLO'
+	})
 	t.end();
 });
