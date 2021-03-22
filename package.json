@@ -1,6 +1,6 @@
 {
   "name": "@poppinss/matchit",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Quickly parse & match URLs",
   "main": "lib/matchit.js",
   "license": "MIT",
