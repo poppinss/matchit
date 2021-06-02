@@ -355,6 +355,8 @@ test('match params via matcher (found match)', t => {
 	});
 
 	t.deepEqual($.match('/foo/bar', [foo]), foo);
+	t.deepEqual($.match('/foo/', [foo]), []);
+	t.deepEqual($.match('/foo', [foo]), []);
 	t.end();
 });
 
@@ -365,6 +367,7 @@ test('match params via matcher (optional-param)', t => {
 
 	t.deepEqual($.match('/foo', [foo]), foo);
 	t.deepEqual($.match('/foo/1', [foo]), foo);
+	t.deepEqual($.match('/foo/', [foo]), foo);
 	t.end();
 });
 
@@ -420,5 +423,24 @@ test('cast multiple params', t => {
 		bar: 1,
 		baz: 'HELLO'
 	})
+	t.end();
+});
+
+test('test empty string param against matcher', t => {
+	const foo = $.parse('/foo/:bar/baz', {
+		bar: { match: /[a-z]+/ }
+	});
+
+	t.deepEqual($.match('/foo/bar/baz', [foo]), foo);
+	t.deepEqual($.match('/foo//baz', [foo]), []);
+	t.end();
+});
+
+test('allow empty string when there is no matcher', t => {
+	const foo = $.parse('/foo/:bar/baz', {
+	});
+
+	t.deepEqual($.match('/foo/bar/baz', [foo]), foo);
+	t.deepEqual($.match('/foo//baz', [foo]), foo);
 	t.end();
 });
