@@ -142,7 +142,7 @@ export function parse(str, matchers) {
 	return out;
 }
 
-export function exec(str, arr) {
+export function exec(str, arr, shouldDecodeParam) {
 	let i=0, x, y, segs=split(str), out={};
 	for (; i < arr.length; i++) {
 		x=segs[i]; y=arr[i];
@@ -150,6 +150,9 @@ export function exec(str, arr) {
 
 		if (y.val === '*') {
 			out[y.val] = segs.slice(i).map((value) => {
+				if (!shouldDecodeParam) {
+					return value
+				}
 				try {
 					return decodeURIComponent(value)
 				} catch {
@@ -161,9 +164,11 @@ export function exec(str, arr) {
 
 		if (x !== void 0 && y.type | 2 === OTYPE) {
 			let value = x.replace(y.end, '');
-			try {
-				value = decodeURIComponent(value)
-			} catch {}
+			if (shouldDecodeParam) {
+				try {
+					value = decodeURIComponent(value)
+				} catch {}
+			}
 			out[ y.val ] = y.cast ? y.cast(value) : value
 		}
 	}
