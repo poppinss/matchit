@@ -444,3 +444,30 @@ test('allow empty string when there is no matcher', t => {
 	t.deepEqual($.match('/foo//baz', [foo]), foo);
 	t.end();
 });
+
+test('handle unicode values in params', t => {
+	const foo = $.parse('/foo/:bar', {});
+
+	t.deepEqual($.exec('/foo/fran%C3%A7ais', foo), {
+		bar: 'français'
+	})
+	t.end();
+});
+
+test('handle unicode values in optional params', t => {
+	const foo = $.parse('/foo/:bar?', {});
+
+	t.deepEqual($.exec('/foo/fran%C3%A7ais', foo), {
+		bar: 'français'
+	})
+	t.end();
+});
+
+test('handle unicode values in wildcard params', t => {
+	const foo = $.parse('/foo/*', {});
+
+	t.deepEqual($.exec('/foo/fran%C3%A7ais', foo), {
+		'*': ['français']
+	})
+	t.end();
+});
